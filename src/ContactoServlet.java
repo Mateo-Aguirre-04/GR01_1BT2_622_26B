@@ -10,11 +10,14 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ContactoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final ContactoDAO contactoDAO = new ContactoDAO();
+    private final GrupoDAO grupoDAO = new GrupoDAO(); // Se añade la instancia de GrupoDAO
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         if ("1".equals(request.getParameter("nuevo"))) {
+            // Se envía la lista de grupos al formulario para crear
+            request.setAttribute("listaGrupos", grupoDAO.listarGrupos());
             request.getRequestDispatcher("/WEB-INF/formulario-contacto.jsp").forward(request, response);
             return;
         }
@@ -32,6 +35,8 @@ public class ContactoServlet extends HttpServlet {
                 return;
             }
             request.setAttribute("contacto", contacto);
+            // Se envía la lista de grupos al formulario para editar
+            request.setAttribute("listaGrupos", grupoDAO.listarGrupos());
             request.getRequestDispatcher("/WEB-INF/formulario-contacto.jsp").forward(request, response);
             return;
         }

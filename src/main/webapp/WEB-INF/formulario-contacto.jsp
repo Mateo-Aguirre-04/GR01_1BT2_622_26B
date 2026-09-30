@@ -50,8 +50,13 @@
                     <textarea name="direccion" rows="3"><c:out value="${contacto.direccion}" /></textarea>
                 </label>
                 <label>
-                    <span>ID del grupo <small>(opcional)</small></span>
-                    <input type="number" name="grupoId" min="1" value="<c:out value='${contacto.grupoId}' />">
+                    <span>Grupo <small>(opcional)</small></span>
+                    <select name="grupoId">
+                        <option value="">-- Sin grupo --</option>
+                        <c:forEach var="grupo" items="${listaGrupos}">
+                            <option value="${grupo.id}" ${grupo.id == contacto.grupoId ? 'selected' : ''}>${grupo.nombre}</option>
+                        </c:forEach>
+                    </select>
                 </label>
             </div>
 

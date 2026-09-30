@@ -75,4 +75,5 @@ public class Contacto {
     public void setGrupoId(Integer grupoId) {
         this.grupoId = grupoId;
     }
+
 }
