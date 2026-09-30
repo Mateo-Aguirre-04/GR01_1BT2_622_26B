@@ -8,17 +8,13 @@ import java.io.IOException;
 // 1. Pon la ruta aquí arriba
 @WebServlet("/grupos") 
 public class GrupoServlet extends HttpServlet {
-    // Declarar como variables de clase una instancia de GrupoDAO y otra de ContactoDAO
-    private GrupoDAO grupoDAO;
+    private final GrupoDAO grupoDAO = GrupoDAO.getInstance();
     private ContactoDAO contactoDAO;
 
     // Sobrescribir doGet: obtener la lista de grupos desde GrupoDAO, guardarla en el request como "listaGrupos" y despachar a grupos.jsp
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Inicializar las instancias de GrupoDAO y ContactoDAO si aún no están inicializadas
-        if (grupoDAO == null) {
-            grupoDAO = new GrupoDAO();
-        }
+        // Inicializar ContactoDAO si aún no está inicializado
         if (contactoDAO == null) {
             contactoDAO = new ContactoDAO();
         }
@@ -36,10 +32,7 @@ public class GrupoServlet extends HttpServlet {
     // Si action es "eliminar", obtener "id", llamar a grupoDAO.eliminarGrupo(id, contactoDAO) y redirigir a "/grupos".
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Inicializar las instancias de GrupoDAO y ContactoDAO si aún no están inicializadas
-        if (grupoDAO == null) {
-            grupoDAO = new GrupoDAO();
-        }
+        // Inicializar ContactoDAO si aún no está inicializado
         if (contactoDAO == null) {
             contactoDAO = new ContactoDAO();
         }

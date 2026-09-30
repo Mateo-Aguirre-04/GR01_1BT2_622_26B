@@ -4,8 +4,17 @@ import java.util.List;
 import java.util.Map;
 
 public class GrupoDAO {
+    private static final GrupoDAO INSTANCIA = new GrupoDAO();
+
     private final Map<Integer, Grupo> grupos = new HashMap<>();
     private int siguienteId = 1;
+
+    private GrupoDAO() {
+    }
+
+    public static GrupoDAO getInstance() {
+        return INSTANCIA;
+    }
 
     // Crear grupo
     public synchronized boolean crearGrupo(Grupo grupo) {

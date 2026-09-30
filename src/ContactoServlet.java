@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ContactoServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private final ContactoDAO contactoDAO = new ContactoDAO();
-    private final GrupoDAO grupoDAO = new GrupoDAO(); // Se añade la instancia de GrupoDAO
+    private final GrupoDAO grupoDAO = GrupoDAO.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
