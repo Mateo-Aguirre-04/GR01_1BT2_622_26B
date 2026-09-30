@@ -1,4 +1,6 @@
-App.class
 ContactoServlet.class
 ContactoDAO.class
+GrupoServlet.class
 Contacto.class
+GrupoDAO.class
+Grupo.class

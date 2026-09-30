@@ -11,8 +11,12 @@
 <body>
     <main class="page-shell">
         <header class="site-header">
-            <a class="brand" href="${pageContext.request.contextPath}/contactos">Agenda<span>.</span></a>
-            <span class="header-label">GESTIÓN DE CONTACTOS</span>
+            <a class="brand" href="${pageContext.request.contextPath}/">Agenda<span>.</span></a>
+            <nav class="main-nav" aria-label="Navegación principal">
+                <a class="nav-link" href="${pageContext.request.contextPath}/">Inicio</a>
+                <a class="nav-link is-active" href="${pageContext.request.contextPath}/contactos">Contactos</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/grupos">Grupos</a>
+            </nav>
         </header>
 
         <section class="page-heading">
@@ -24,14 +28,14 @@
             <a class="button button-primary" href="${pageContext.request.contextPath}/contactos?nuevo=1">+ Nuevo contacto</a>
         </section>
 
-        <c:if test="${param.mensaje == 'creado'}">
-            <p class="notice" role="status">Contacto creado.</p>
+        <c:if test="${mensaje == 'creado'}">
+            <p class="notice notice-success" role="status">Contacto creado.</p>
         </c:if>
-        <c:if test="${param.mensaje == 'actualizado'}">
-            <p class="notice" role="status">Contacto actualizado.</p>
+        <c:if test="${mensaje == 'actualizado'}">
+            <p class="notice notice-success" role="status">Contacto actualizado.</p>
         </c:if>
-        <c:if test="${param.mensaje == 'eliminado'}">
-            <p class="notice" role="status">Contacto eliminado.</p>
+        <c:if test="${mensaje == 'eliminado'}">
+            <p class="notice notice-success" role="status">Contacto eliminado.</p>
         </c:if>
 
         <c:choose>
@@ -48,8 +52,10 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
+                                <th>Apellido</th>
                                 <th>Teléfono</th>
                                 <th>Correo</th>
+                                <th>Dirección</th>
                                 <th>Grupo</th>
                                 <th><span class="visually-hidden">Acciones</span></th>
                             </tr>
@@ -57,19 +63,18 @@
                         <tbody>
                             <c:forEach var="contacto" items="${contactos}">
                                 <tr>
-                                    <td class="contact-name"><c:out value="${contacto.nombre}" /> <c:out value="${contacto.apellido}" /></td>
+                                    <td class="contact-name"><c:out value="${contacto.nombre}" /></td>
+                                    <td><c:out value="${contacto.apellido}" /></td>
                                     <td><c:out value="${contacto.telefono}" default="—" /></td>
                                     <td><c:out value="${contacto.correo}" default="—" /></td>
+                                    <td><c:out value="${contacto.direccion}" default="—" /></td>
                                     <td>
-                                        <c:choose>
-                                            <c:when test="${not empty contacto.grupoId}">Grupo <c:out value="${contacto.grupoId}" /></c:when>
-                                            <c:otherwise>Sin grupo</c:otherwise>
-                                        </c:choose>
+                                        <c:if test="${not empty contacto.grupoId}">Grupo </c:if>
+                                        <c:out value="${contacto.grupoId}" default="Sin grupo" />
                                     </td>
                                     <td class="row-actions">
                                         <a class="text-action" href="${pageContext.request.contextPath}/contactos?id=${contacto.id}">Editar</a>
-                                        <form method="post" action="${pageContext.request.contextPath}/contactos"
-                                                onsubmit="return confirm('¿Eliminar este contacto?');">
+                                        <form method="post" action="${pageContext.request.contextPath}/contactos">
                                             <input type="hidden" name="accion" value="eliminar">
                                             <input type="hidden" name="id" value="${contacto.id}">
                                             <button class="text-action text-danger" type="submit">Eliminar</button>

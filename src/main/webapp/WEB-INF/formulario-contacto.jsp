@@ -12,17 +12,21 @@
 <body>
     <main class="page-shell page-shell-narrow">
         <header class="site-header">
-            <a class="brand" href="${pageContext.request.contextPath}/contactos">Agenda<span>.</span></a>
-            <a class="header-link" href="${pageContext.request.contextPath}/contactos">Volver a contactos</a>
+            <a class="brand" href="${pageContext.request.contextPath}/">Agenda<span>.</span></a>
+            <nav class="main-nav" aria-label="Navegación principal">
+                <a class="nav-link" href="${pageContext.request.contextPath}/">Inicio</a>
+                <a class="nav-link is-active" href="${pageContext.request.contextPath}/contactos">Contactos</a>
+                <a class="nav-link" href="${pageContext.request.contextPath}/grupos">Grupos</a>
+            </nav>
         </header>
 
-        <section class="form-heading">
+        <section class="form-heading content-panel">
             <p class="eyebrow">DIRECTORIO</p>
             <h1><c:choose><c:when test="${esEdicion}">Editar contacto</c:when><c:otherwise>Nuevo contacto</c:otherwise></c:choose></h1>
             <p class="subtitle">Completa los datos del contacto.</p>
         </section>
 
-        <form class="contact-form" method="post" action="${pageContext.request.contextPath}/contactos">
+        <form class="form-panel" method="post" action="${pageContext.request.contextPath}/contactos">
             <input type="hidden" name="accion" value="${esEdicion ? 'actualizar' : 'crear'}">
             <c:if test="${esEdicion}">
                 <input type="hidden" name="id" value="${contacto.id}">
@@ -43,7 +47,7 @@
                 </label>
                 <label>
                     <span>Correo</span>
-                    <input type="text" name="correo" value="<c:out value='${contacto.correo}' />">
+                    <input type="email" name="correo" value="<c:out value='${contacto.correo}' />">
                 </label>
                 <label class="field-wide">
                     <span>Dirección</span>
@@ -54,7 +58,7 @@
                     <select name="grupoId">
                         <option value="">-- Sin grupo --</option>
                         <c:forEach var="grupo" items="${listaGrupos}">
-                            <option value="${grupo.id}" ${grupo.id == contacto.grupoId ? 'selected' : ''}>${grupo.nombre}</option>
+                            <option value="${grupo.id}" ${grupo.id == contacto.grupoId ? 'selected' : ''}><c:out value="${grupo.nombre}" /></option>
                         </c:forEach>
                     </select>
                 </label>
