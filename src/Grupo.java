@@ -1,8 +1,27 @@
-// Clase pública Grupo con los atributos privados id (int) y nombre (String). Generar constructor vacío, constructor con todos los parámetros, getters y setters.
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "grupos")
 public class Grupo {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(nullable = false, length = 100)
     private String nombre;
+
+    // Lado inverso de la relación Grupo 1 → N Contactos (la FK vive en contactos.grupo_id).
+    @OneToMany(mappedBy = "grupo")
+    private List<Contacto> contactos = new ArrayList<>();
 
     // Constructor vacío
     public Grupo() {
@@ -29,5 +48,13 @@ public class Grupo {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public List<Contacto> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(List<Contacto> contactos) {
+        this.contactos = contactos;
     }
 }
