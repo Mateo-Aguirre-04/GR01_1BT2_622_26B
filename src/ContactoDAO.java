@@ -1,3 +1,4 @@
+import java.util.Locale;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -27,7 +28,27 @@ public class ContactoDAO {
 
     // Muestra todos los contactos registrados.
     public List<Contacto> mostrarContactos() {
+        return buscarContactos(null);
+    }
+
+    public List<Contacto> buscarContactos(String busqueda) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            if (busqueda != null && !busqueda.isBlank()) {
+                String termino = busqueda.trim().toLowerCase(Locale.ROOT)
+                        .replace("!", "!!")
+                        .replace("%", "!%")
+                        .replace("_", "!_");
+                return session.createQuery(
+                        "from Contacto c where "
+                                + "lower(concat(coalesce(c.nombre, ''), ' ', coalesce(c.apellido, ''))) like :busqueda escape '!' "
+                                + "or lower(c.telefono) like :busqueda escape '!' "
+                                + "or lower(c.correo) like :busqueda escape '!' "
+                                + "or lower(c.direccion) like :busqueda escape '!' "
+                                + "order by c.id",
+                        Contacto.class)
+                        .setParameter("busqueda", "%" + termino + "%")
+                        .list();
+            }
             return session.createQuery("from Contacto c order by c.id", Contacto.class).list();
         }
     }

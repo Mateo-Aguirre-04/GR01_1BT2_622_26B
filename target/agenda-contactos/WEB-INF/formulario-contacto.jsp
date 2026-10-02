@@ -22,6 +22,10 @@
             <p class="subtitle">Completa los datos del contacto.</p>
         </section>
 
+        <c:if test="${not empty errorFormulario}">
+            <p class="notice" role="alert"><c:out value="${errorFormulario}" /></p>
+        </c:if>
+
         <form class="contact-form" method="post" action="${pageContext.request.contextPath}/contactos">
             <input type="hidden" name="accion" value="${esEdicion ? 'actualizar' : 'crear'}">
             <c:if test="${esEdicion}">
@@ -31,7 +35,7 @@
             <div class="form-grid">
                 <label>
                     <span>Nombre</span>
-                    <input type="text" name="nombre" value="<c:out value='${contacto.nombre}' />">
+                    <input type="text" name="nombre" value="<c:out value='${contacto.nombre}' />" required>
                 </label>
                 <label>
                     <span>Apellido</span>
@@ -39,19 +43,15 @@
                 </label>
                 <label>
                     <span>Teléfono</span>
-                    <input type="tel" name="telefono" value="<c:out value='${contacto.telefono}' />">
+                    <input type="tel" name="telefono" value="<c:out value='${contacto.telefono}' />" required>
                 </label>
                 <label>
                     <span>Correo</span>
-                    <input type="text" name="correo" value="<c:out value='${contacto.correo}' />">
+                    <input type="email" name="correo" value="<c:out value='${contacto.correo}' />">
                 </label>
                 <label class="field-wide">
                     <span>Dirección</span>
                     <textarea name="direccion" rows="3"><c:out value="${contacto.direccion}" /></textarea>
-                </label>
-                <label>
-                    <span>ID del grupo <small>(opcional)</small></span>
-                    <input type="number" name="grupoId" min="1" value="<c:out value='${contacto.grupoId}' />">
                 </label>
             </div>
 

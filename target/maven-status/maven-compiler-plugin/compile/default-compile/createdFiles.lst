@@ -1,4 +1,7 @@
-App.class
 ContactoServlet.class
-ContactoDAO.class
 Contacto.class
+HibernateUtil.class
+Grupo.class
+ContactoDAO.class
+GrupoServlet.class
+GrupoDAO.class
