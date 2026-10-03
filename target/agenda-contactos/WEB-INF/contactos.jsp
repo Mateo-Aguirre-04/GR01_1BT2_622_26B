@@ -34,12 +34,31 @@
             <p class="notice" role="status">Contacto eliminado.</p>
         </c:if>
 
+        <form class="search-form" method="get" action="${pageContext.request.contextPath}/contactos" role="search">
+            <label class="search-label" for="busqueda">Explora tu agenda</label>
+            <div class="search-controls">
+                <input id="busqueda" name="busqueda" type="search" value="<c:out value='${busqueda}' />" placeholder="Escribe para buscar">
+                <button class="button button-primary" type="submit">Buscar</button>
+                <c:if test="${not empty busqueda}">
+                    <a class="button button-secondary" href="${pageContext.request.contextPath}/contactos">Limpiar</a>
+                </c:if>
+            </div>
+        </form>
+
         <c:choose>
             <c:when test="${empty contactos}">
                 <section class="empty-state">
-                    <h2>Aún no hay contactos</h2>
-                    <p>Registra el primero para empezar tu directorio.</p>
-                    <a class="button button-primary" href="${pageContext.request.contextPath}/contactos?nuevo=1">Registrar contacto</a>
+                    <c:choose>
+                        <c:when test="${not empty busqueda}">
+                            <h2>No se encontraron contactos</h2>
+                            <p>Prueba con otro nombre, teléfono, correo o dirección.</p>
+                        </c:when>
+                        <c:otherwise>
+                            <h2>Aún no hay contactos</h2>
+                            <p>Registra el primero para empezar tu directorio.</p>
+                            <a class="button button-primary" href="${pageContext.request.contextPath}/contactos?nuevo=1">Registrar contacto</a>
+                        </c:otherwise>
+                    </c:choose>
                 </section>
             </c:when>
             <c:otherwise>
@@ -50,7 +69,6 @@
                                 <th>Nombre</th>
                                 <th>Teléfono</th>
                                 <th>Correo</th>
-                                <th>Grupo</th>
                                 <th><span class="visually-hidden">Acciones</span></th>
                             </tr>
                         </thead>
@@ -60,12 +78,6 @@
                                     <td class="contact-name"><c:out value="${contacto.nombre}" /> <c:out value="${contacto.apellido}" /></td>
                                     <td><c:out value="${contacto.telefono}" default="—" /></td>
                                     <td><c:out value="${contacto.correo}" default="—" /></td>
-                                    <td>
-                                        <c:choose>
-                                            <c:when test="${not empty contacto.grupoId}">Grupo <c:out value="${contacto.grupoId}" /></c:when>
-                                            <c:otherwise>Sin grupo</c:otherwise>
-                                        </c:choose>
-                                    </td>
                                     <td class="row-actions">
                                         <a class="text-action" href="${pageContext.request.contextPath}/contactos?id=${contacto.id}">Editar</a>
                                         <form method="post" action="${pageContext.request.contextPath}/contactos"

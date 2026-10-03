@@ -36,7 +36,9 @@ public class ContactoServlet extends HttpServlet {
             return;
         }
 
-        request.setAttribute("contactos", contactoDAO.mostrarContactos());
+        String busqueda = request.getParameter("busqueda");
+        request.setAttribute("busqueda", busqueda == null ? "" : busqueda.trim());
+        request.setAttribute("contactos", contactoDAO.buscarContactos(busqueda));
         request.setAttribute("mensaje", request.getParameter("mensaje"));
         request.getRequestDispatcher("/WEB-INF/contactos.jsp").forward(request, response);
     }
@@ -50,13 +52,22 @@ public class ContactoServlet extends HttpServlet {
         try {
             switch (accion == null ? "" : accion) {
                 case "crear":
-                    contactoDAO.registrarContacto(leerContacto(request));
+                    Contacto nuevoContacto = leerContacto(request);
+                    if (!contactoValido(nuevoContacto)) {
+                        mostrarFormularioConError(request, response, nuevoContacto);
+                        return;
+                    }
+                    contactoDAO.registrarContacto(nuevoContacto);
                     redirigir(response, request, "creado");
                     break;
                 case "actualizar":
                     Contacto contacto = leerContacto(request);
                     contacto.setId(parseId(request.getParameter("id"), response));
                     if (contacto.getId() <= 0) {
+                        return;
+                    }
+                    if (!contactoValido(contacto)) {
+                        mostrarFormularioConError(request, response, contacto);
                         return;
                     }
                     if (!contactoDAO.editarContacto(contacto)) {
@@ -80,26 +91,28 @@ public class ContactoServlet extends HttpServlet {
                     response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Acción de contacto no válida.");
             }
         } catch (NumberFormatException exception) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El identificador del grupo no es válido.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "El identificador del contacto no es válido.");
         }
     }
 
     private Contacto leerContacto(HttpServletRequest request) {
         return new Contacto(request.getParameter("nombre"), request.getParameter("apellido"),
                 request.getParameter("telefono"), request.getParameter("correo"),
-                request.getParameter("direccion"), leerGrupoId(request.getParameter("grupoId")));
+                request.getParameter("direccion"), null);
     }
 
-    private Integer leerGrupoId(String grupoId) {
-        if (grupoId == null || grupoId.isBlank()) {
-            return null;
-        }
+    private boolean contactoValido(Contacto contacto) {
+        String correo = contacto.getCorreo();
+        return contacto.getNombre() != null && !contacto.getNombre().isBlank()
+                && contacto.getTelefono() != null && !contacto.getTelefono().isBlank()
+                && (correo == null || correo.isBlank() || correo.matches("[^\\s@]+@[^\\s@]+\\.[^\\s@]+"));
+    }
 
-        int id = Integer.parseInt(grupoId.trim());
-        if (id <= 0) {
-            throw new NumberFormatException("El identificador del grupo debe ser positivo.");
-        }
-        return id;
+    private void mostrarFormularioConError(HttpServletRequest request, HttpServletResponse response,
+            Contacto contacto) throws ServletException, IOException {
+        request.setAttribute("contacto", contacto);
+        request.setAttribute("errorFormulario", "Ingresa el nombre y el teléfono, y verifica el formato del correo.");
+        request.getRequestDispatcher("/WEB-INF/formulario-contacto.jsp").forward(request, response);
     }
 
     private int parseId(String valor, HttpServletResponse response) throws IOException {

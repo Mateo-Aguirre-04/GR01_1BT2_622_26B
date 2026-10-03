@@ -131,6 +131,70 @@ h1 {
     color: var(--ink);
 }
 
+.search-form {
+    display: grid;
+    grid-template-columns: minmax(150px, .35fr) minmax(0, 1fr);
+    align-items: center;
+    max-width: 850px;
+    gap: 16px;
+    margin: 0 0 26px;
+    border: 1px solid #d7e5e0;
+    border-left: 4px solid var(--green);
+    border-radius: 5px;
+    background: #eaf2ef;
+    padding: 14px 16px;
+}
+
+.search-label {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    gap: 9px;
+    color: var(--green-dark);
+    font-size: 14px;
+    font-weight: 750;
+}
+
+.search-label::before {
+    width: 4px;
+    height: 22px;
+    border-radius: 2px;
+    background: var(--green);
+    content: "";
+}
+
+.search-controls {
+    display: flex;
+    min-width: 0;
+    gap: 6px;
+    border: 1px solid #cbd8d4;
+    border-radius: 5px;
+    background: var(--paper);
+    padding: 4px;
+}
+
+.search-controls input {
+    min-width: 0;
+    flex: 1;
+    border: 0;
+    border-radius: 3px;
+    background: transparent;
+    padding: 10px 12px;
+    color: var(--ink);
+    font: inherit;
+}
+
+.search-controls input:focus {
+    outline: 2px solid #bce4d8;
+    outline-offset: -2px;
+}
+
+.search-controls .button {
+    min-height: 38px;
+    padding: 0 12px;
+    font-size: 14px;
+}
+
 .notice {
     margin-bottom: 20px;
     border-left: 3px solid var(--green);
@@ -301,6 +365,20 @@ tbody tr:last-child td {
         align-items: flex-start;
         flex-direction: column;
         margin-top: 34px;
+    }
+
+    .search-controls {
+        flex-wrap: wrap;
+    }
+
+    .search-form {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .search-controls input {
+        flex-basis: 100%;
     }
 
     h1 {
